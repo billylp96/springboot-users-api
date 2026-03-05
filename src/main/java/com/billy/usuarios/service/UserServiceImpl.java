@@ -51,6 +51,7 @@ public class UserServiceImpl implements UserService {
     public void checkAndAssignPhoto(User user, MultipartFile file) throws IOException {
         // Subir imagen si viene
         if (file != null && !file.isEmpty()) {
+            System.out.println("---entro en if de checkAndAssignPhoto");
             String url;
             url = cloudinaryService.uploadFile(file);
             user.setUrlProfilePhoto(url); // agregas la url al user
@@ -69,10 +70,6 @@ public class UserServiceImpl implements UserService {
             userDb.setEmail(userDto.getEmail());
             userDb.setAge(userDto.getAge());
             userDb.setCellphone(userDto.getCellphone());
-
-            if(userDto.getUrlProfilePhoto()!=null){
-                userDb.setUrlProfilePhoto(userDto.getUrlProfilePhoto());
-            }
 
             this.checkAndAssignPhoto(userDb,file) ;
 

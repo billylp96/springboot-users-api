@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import com.billy.usuarios.dto.UserDto;
-import com.billy.usuarios.service.cloudinary.CloudinaryService;
 import com.billy.usuarios.service.interfaces.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,19 +14,18 @@ import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
-    private final CloudinaryService cloudinaryService;
 
     @GetMapping()
     public ResponseEntity<?> get() {
@@ -42,16 +40,6 @@ public class UserController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // @PostMapping()
-    // public ResponseEntity<?> post(@RequestBody @Valid UserDto userDto,
-    // BindingResult rs) {
-    // if (rs.hasErrors()) {
-    // return this.validate(userDto, rs);
-    // }
-
-    // return
-    // ResponseEntity.status(HttpStatus.CREATED).body(this.userService.save(userDto));
-    // }
 
     @PostMapping
     public ResponseEntity<?> post(
@@ -98,6 +86,14 @@ public class UserController {
         }
 
     }
+
+    @DeleteMapping
+    public ResponseEntity<?> deleteById(@PathVariable Long id) {
+        this.userService.delete(id);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
 
     // validation method
     public ResponseEntity<?> validate(UserDto userDto, BindingResult rs) {

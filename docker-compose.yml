@@ -22,8 +22,8 @@ services:
     networks:
       - mi-red
     environment:
-      HOSTNAME: ${DB_URL}
-      PORT: ${DB_PORT}
+      DB_URL: ${DB_URL}
+      DB_PORT: ${DB_PORT}
       DB_NAME: ${DB_NAME}
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}

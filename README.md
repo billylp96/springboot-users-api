@@ -1,6 +1,6 @@
-## Hola
+# Hola
 
-Este proyecto es de prueba, se utilizó:
+## Este proyecto es de prueba, se utilizó:
 
 - Java
 - Maven
