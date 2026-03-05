@@ -48,15 +48,7 @@ public class UserServiceImpl implements UserService {
         return UserMapper.userToDto(this.repository.save(user));
     }
 
-    public void checkAndAssignPhoto(User user, MultipartFile file) throws IOException {
-        // Subir imagen si viene
-        if (file != null && !file.isEmpty()) {
-            System.out.println("---entro en if de checkAndAssignPhoto");
-            String url;
-            url = cloudinaryService.uploadFile(file);
-            user.setUrlProfilePhoto(url); // agregas la url al user
-        }
-    }
+    
 
     @Override
     @Transactional
@@ -85,4 +77,13 @@ public class UserServiceImpl implements UserService {
         this.repository.deleteById(id);
     }
 
+
+    public void checkAndAssignPhoto(User user, MultipartFile file) throws IOException {
+        // Subir imagen si viene
+        if (file != null && !file.isEmpty()) {
+            String url;
+            url = cloudinaryService.uploadFile(file);
+            user.setUrlProfilePhoto(url); // agregas la url al user
+        }
+    }
 }
