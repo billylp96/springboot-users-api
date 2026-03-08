@@ -40,7 +40,6 @@ public class UserController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-
     @PostMapping
     public ResponseEntity<?> post(
             @ModelAttribute @Valid UserDto userDto, // ModelAtribute mapea las propiedades del form data a objeto
@@ -60,7 +59,7 @@ public class UserController {
         } catch (Exception e) {
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error al subir la imagen");
+                    .body("Error al subir la imagen: \n" + e.getLocalizedMessage());
         }
     }
 
@@ -78,7 +77,7 @@ public class UserController {
                 return ResponseEntity.status(HttpStatus.CREATED).body(dto);
             }
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El usuario a modificar no existe!");
-            
+
         } catch (Exception e) {
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -93,7 +92,6 @@ public class UserController {
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
-
 
     // validation method
     public ResponseEntity<?> validate(UserDto userDto, BindingResult rs) {

@@ -2,6 +2,7 @@ package com.billy.usuarios.service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -43,12 +44,10 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserDto save(UserDto userDto, MultipartFile file) throws IOException {
         User user = UserMapper.dtoToUser(userDto);
-        this.checkAndAssignPhoto(user,file);
+        this.checkAndAssignPhoto(user, file);
 
         return UserMapper.userToDto(this.repository.save(user));
     }
-
-    
 
     @Override
     @Transactional
@@ -63,7 +62,7 @@ public class UserServiceImpl implements UserService {
             userDb.setAge(userDto.getAge());
             userDb.setCellphone(userDto.getCellphone());
 
-            this.checkAndAssignPhoto(userDb,file) ;
+            this.checkAndAssignPhoto(userDb, file);
 
             return UserMapper.userToDto(this.repository.save(userDb));
         }
@@ -77,13 +76,23 @@ public class UserServiceImpl implements UserService {
         this.repository.deleteById(id);
     }
 
-
     public void checkAndAssignPhoto(User user, MultipartFile file) throws IOException {
         // Subir imagen si viene
         if (file != null && !file.isEmpty()) {
-            String url;
-            url = cloudinaryService.uploadFile(file);
-            user.setUrlProfilePhoto(url); // agregas la url al user
+            String urlPhoto;
+            String idPhoto;
+
+            if (user.getPhotoPublicId() != null && !user.getPhotoPublicId().isBlank()) {
+                cloudinaryService.destroyPreviousImage(user.getPhotoPublicId());
+            }
+
+            Map<String, Object> uploadResult = this.cloudinaryService.uploadFile(file);
+            urlPhoto = uploadResult.get("secure_url").toString();
+            idPhoto = uploadResult.get("public_id").toString();
+
+            // agregar valores al user
+            user.setUrlProfilePhoto(urlPhoto);
+            user.setPhotoPublicId(idPhoto);
         }
     }
 }
