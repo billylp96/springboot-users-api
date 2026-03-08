@@ -35,5 +35,8 @@ public class User {
 
     @Column(name = "url_profile_photo")
     private String urlProfilePhoto;
+    
+    @Column(name = "photo_public_id")
+    private String photoPublicId;
 
 }
